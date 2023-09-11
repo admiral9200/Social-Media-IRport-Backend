@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
+require('dotenv').config();
+
 const profileController = require('./controller/profile');
 
 // multer middleware...
@@ -25,7 +27,8 @@ const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
   };
-const url = "mongodb+srv://lion9200world:kalid92413@cluster0.aqblem9.mongodb.net/";
+const url = process.env.MONGODB_URL;
+
 mongoose.connect(url, options)
     .then(() => console.log('Successfully connected to MongoDB'))
     .catch(err => console.log(err));
@@ -45,6 +48,6 @@ app.use('/profile/get', (req, res) => {
     return profileController.getProfile(req, res);
 })
 
-const PORT = process.env.PORT || 9200;
+const PORT = process.env.PORT;
 
 app.listen(PORT, console.log(`Server running PORT ${PORT}`));
