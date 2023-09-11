@@ -20,9 +20,7 @@ const upload = multer({ storage: storage });
 
 app.use((express.json({ limit: "30mb", extended: true})))
 app.use((express.urlencoded({ limit: "30mb", extended: true})))
-app.use((cors({
-    origin: 'https://social-media-i-report-mgj7-inl8yw03j-admiral9200.vercel.app/'
-})))
+app.use(cors());
 
 const mongoose = require('mongoose');
 const options = {
