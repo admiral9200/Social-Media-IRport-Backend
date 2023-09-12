@@ -34,10 +34,9 @@ mongoose.connect(url, options)
     .then(() => console.log('Successfully connected to MongoDB'))
     .catch(err => console.log(err));
 
-app.use('/insert/xlsx', (req, res) => {
-    return xlsxController.insertData(req, res);
-})
-
+// app.use('/insert/xlsx', (req, res) => {
+//     return xlsxController.insertData(req, res);
+// })
 
 app.get('/', (req, res) => {
     res.send("Hello world!");
@@ -52,6 +51,8 @@ app.use('/profile/create', upload.single('file'), (req, res) => {
 app.use('/profile/get', (req, res) => {
     return profileController.getProfile(req, res);
 })
+
+app.use('/election', require('./router/election'));
 
 const PORT = process.env.PORT;
 
