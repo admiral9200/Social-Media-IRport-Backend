@@ -5,3 +5,4 @@ const profileController = require('../controller/profile');
 router.post('/createProfile', (req, res) => {
     return profileController.createProfile(req, res);
 })
+module.exports = router;
