@@ -29,8 +29,7 @@ exports.createProfile = async (req, res) => {
 }
 
 exports.getProfile = async (req, res) => {
-    // console.log("get profile: ", req);
-    const id = "64fad4463584ba0486830329";
+    const id = req.body.params;
     const profile = await Profile.findOne({ user: id });
     if(profile) {
         return res.status(200).json({ profile });

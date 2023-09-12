@@ -5,6 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const profileController = require('./controller/profile');
+const xlsxController = require('./controller/xlsx');
 
 // multer middleware...
 const multer = require('multer');
@@ -32,6 +33,10 @@ const url = process.env.MONGODB_URL;
 mongoose.connect(url, options)
     .then(() => console.log('Successfully connected to MongoDB'))
     .catch(err => console.log(err));
+
+app.use('/insert/xlsx', (req, res) => {
+    return xlsxController.insertData(req, res);
+})
 
 
 app.get('/', (req, res) => {
