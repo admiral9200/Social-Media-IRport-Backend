@@ -1,25 +1,55 @@
 const Vote = require('../models/Vote');
+const Image = require('../models/Image');
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+const conn = mongoose.connection;
+
+let gfs;
+
+conn.once('open', () => {
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('uploads');
+})
 
 exports.saveVote = async (req, res) => {
-    const { country, government, poll, state, userId, ward, localParties } = req.body;
+    try {
+        
+        const { country, government, poll, state, userId, ward, localParties } = req.body;
+        console.log("req.body.localParties: ", JSON.parse(localParties));
+        const image = req.file;
 
-    const newVote = new Vote({
-        country,
-        government,
-        poll,
-        state,
-        userId,
-        ward,
-        localParties
-    })
+        const imageInfo = new Image({
+            fileName: image.filename,
+            contentType: image.mimetype,
+            uploadDate: new Date(),
+            length: image.size,
+            chunkSize: 1024 * 255
+        })
 
-    newVote.save()
-        .then(data => {
-            res.status(200).json({ data })
-        })
-        .catch(err => {
-            throw err;
-        })
+        const savedImage = await imageInfo.save();
+
+        const newVote = new Vote({
+            country,
+            government,
+            poll,
+            state,
+            userId,
+            ward,
+            localParties: JSON.parse(localParties),
+            image: savedImage._id
+        });
+
+
+        newVote.save()
+            .then(data => {
+                res.status(200).json({ data });
+            })
+            .catch(err => {
+                throw err;
+            });
+    } catch (err) {
+        throw err;
+    }
 }
 
 exports.getTotalVotes = async (req, res) => {
@@ -47,7 +77,7 @@ exports.getVotePercents = async (req, res) => {
         let vote4 = 0;
         let vote5 = 0;
 
-        for(let i = 0; i < ( await votes).length; i++) {
+        for (let i = 0; i < (await votes).length; i++) {
             sum += votes[i].localParties.reduce((total, obj) => total + parseInt(obj.value), 0);
 
             vote1 += parseInt(votes[i].localParties[0].value);
@@ -67,6 +97,16 @@ exports.getVotersNumber = async (req, res) => {
         const votes = await Vote.find({});
 
         res.status(200).json({ votersNumber: votes.length });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+}
+
+exports.getVotes = async (req, res) => {
+    try {
+        const votes = await Vote.find({});
+
+        res.status(200).json({ votes });
     } catch (error) {
         res.status(500).json({ error });
     }

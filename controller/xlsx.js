@@ -64,7 +64,6 @@ exports.getGovernments = async (req, res) => {
 
 exports.getWards = async (req, res) => {
   try {
-    console.log(req.body)
     const wards = await Election.distinct('ward', { country: req.body.params.country, state: req.body.params.state, government: req.body.params.government });
     if (wards) {
       res.status(200).json({ wards });

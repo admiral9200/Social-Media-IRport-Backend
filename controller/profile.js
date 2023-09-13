@@ -7,7 +7,6 @@ exports.createProfile = async (req, res) => {
     if(req.file) {
         picture = await req.file.fileName;
     }
-    console.log("picture: ", picture);
     const newProfile = new Profile({
         user: req.body.id,
         country,

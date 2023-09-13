@@ -1,7 +1,6 @@
 const Party = require('../models/Party');
 
 exports.saveParty = async (req, res) => {
-    console.log(req.body)
     const { name } = req.body;
 
     const newParty = new Party({

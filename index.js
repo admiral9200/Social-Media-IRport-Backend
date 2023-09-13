@@ -1,37 +1,38 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const multer = require('multer');
 
 require('dotenv').config();
 
 const profileController = require('./controller/profile');
-const xlsxController = require('./controller/xlsx');
 
-// multer middleware...
-const multer = require('multer');
+// Multer storage engine
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, 'uploads');
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname);
+        cb(null, Date.now() + '-' + file.originalname);
     }
-})
+});
+
 const upload = multer({ storage: storage });
 
-app.use((express.json({ limit: "30mb", extended: true})))
-app.use((express.urlencoded({ limit: "30mb", extended: true})))
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 const mongoose = require('mongoose');
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  };
+};
 const url = process.env.MONGODB_URL;
 
 mongoose.connect(url, options)
-    .then(() => console.log('Successfully connected to MongoDB'))
+    .then(() => console.log('Successfully connected to MongoDB Atlas'))
     .catch(err => console.log(err));
 
 app.get('/', (req, res) => {

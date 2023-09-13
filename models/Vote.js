@@ -27,6 +27,16 @@ const VoteSchema = new mongoose.Schema({
     },
     localParties: {
         type: Array,
+        required: false
+    },
+    toAdmin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    image: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image',
         required: true
     }
 }, { timestamps: true })
