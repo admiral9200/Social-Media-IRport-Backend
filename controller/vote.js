@@ -1,5 +1,5 @@
 const Vote = require('../models/Vote');
-const Image = require('../models/Image');
+const Media = require('../models/Media');
 const mongoose = require('mongoose');
 const Grid = require('gridfs-stream');
 const conn = mongoose.connection;
@@ -16,17 +16,17 @@ exports.saveVote = async (req, res) => {
         
         const { country, government, poll, state, userId, ward, localParties } = req.body;
         console.log("req.body.localParties: ", JSON.parse(localParties));
-        const image = req.file;
+        const media = req.file;
 
-        const imageInfo = new Image({
-            fileName: image.filename,
-            contentType: image.mimetype,
+        const mediaInfo = new Media({
+            fileName: media.filename,
+            contentType: media.mimetype,
             uploadDate: new Date(),
-            length: image.size,
+            length: media.size,
             chunkSize: 1024 * 255
         })
 
-        const savedImage = await imageInfo.save();
+        const savedMedia = await mediaInfo.save();
 
         const newVote = new Vote({
             country,
@@ -36,7 +36,7 @@ exports.saveVote = async (req, res) => {
             userId,
             ward,
             localParties: JSON.parse(localParties),
-            image: savedImage._id
+            media: savedMedia._id
         });
 
 

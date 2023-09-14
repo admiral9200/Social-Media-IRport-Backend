@@ -34,10 +34,10 @@ const VoteSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    image: {
+    media: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image',
-        required: true
+        ref: 'Media',
+        required: false
     }
 }, { timestamps: true })
 
