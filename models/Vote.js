@@ -34,6 +34,23 @@ const VoteSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    agent: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    // type of vote - (vote count, vote buying)
+    genre: {
+        type: String,
+        required: false,
+        default: "vote count"
+    },
+    // Checking by Admin
+    checked: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     media: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Media',
